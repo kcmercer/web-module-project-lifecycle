@@ -1,8 +1,18 @@
 import React from 'react';
 import User from './components/User';
 import FollowerList from './components/FollowerList';
+import styled from 'styled-components';
 import axios from 'axios';
 
+const StyledDiv = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: 80%;
+`
+
+const StyledH2 = styled.h2`
+    width: 100%;
+`
 
 
 class App extends React.Component {
@@ -13,7 +23,8 @@ class App extends React.Component {
     login:"",
     public_repos:0,
     followers:0,
-    followerProfiles: []
+    followerProfiles: [],
+    loading: true
   }
 
   onChange = e => {
@@ -28,26 +39,19 @@ class App extends React.Component {
     console.log('click!')
   }
 
-  // onSearch = e => {
-  //   e.preventDefault();
-  //   let searchResult = 
-  //   this.state.search != "" ? this.state.search : 'kcmercer'
-  //   axios.get(`https://api.github.com/users/${searchResult}`)
-  //       .then(resp => {
-  //           console.log(searchResult)
-  //           this.setState({
-  //             ...this.state,
-  //               avatar_url: resp.data.avatar_url,
-  //               name: resp.data.name,
-  //               login: resp.data.login,
-  //               public_repos: resp.data.public_repos,
-  //               followers: resp.data.followers 
-  //           })
-  //           console.log(this.state);
-  //       })
-  // }
+  onSearch = e => {
+    e.preventDefault();
+    const search = this.state.search;
+
+    this.setState({
+      ...this.state,
+      loading: false
+    })
+  }
 
   render() {
+    console.log(this.state.search)
+    const search = this.state.search;
     return(<div>
       <h1>GITHUB INFO</h1>
       <form>
@@ -58,12 +62,13 @@ class App extends React.Component {
         <button onClick={this.onSearch}> Search </button>
       </form>
 
-      <User searchResult = {this.state.search} />
+      <StyledDiv>
+      <User search={search} />
 
-      <div>
-        <h2> Followers: </h2>
-        <FollowerList />
-        </div>
+      <StyledH2> Followers: </StyledH2>
+      <FollowerList search={this.state.search} />
+      </StyledDiv>
+
     </div>);
   }
 }

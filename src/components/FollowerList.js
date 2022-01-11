@@ -5,6 +5,7 @@ import Follower from './Follower';
 class FollowerList extends React.Component {
     state = {
         followers: [],
+        loading: true
     };
 
     componentDidMount() {
@@ -12,10 +13,28 @@ class FollowerList extends React.Component {
             .then(resp => {
                 console.log(resp.data)
                 this.setState({
-                    followers: resp.data
+                    followers: resp.data,
+                    loading: false,
                 })
                 console.log(this.state);
             })
+    }
+
+    componentDidUpdate(prevProps) {
+        console.log('State Changed')
+        if (this.props.search !== prevProps.search) {
+            axios.get(`https://api.github.com/users/${this.props.search}/followers`)
+            .then(resp => {
+                console.log(resp.data)
+                this.setState({
+                    followers: resp.data,
+                    loading: false,
+                })
+                console.log(this.state);
+            })
+        } else {
+            console.log('Same Followers')
+        }
     }
 
     render() {
@@ -24,6 +43,7 @@ class FollowerList extends React.Component {
             <>
                 {
                     this.state.followers.map(user => (
+                        console.log(user),
                         <Follower key={user.id} user={user} />
                     ))
                 }
