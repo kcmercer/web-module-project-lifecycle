@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-
+import App from '../App';
 
 class User extends React.Component {
     state = {
@@ -12,7 +12,7 @@ class User extends React.Component {
     }
 
     componentDidMount() {
-        axios.get("https://api.github.com/users/kcmercer")
+        axios.get(`https://api.github.com/users/kcmercer`)
             .then(resp => {
                 console.log(resp.data)
                 this.setState({
@@ -24,6 +24,26 @@ class User extends React.Component {
                 })
                 console.log(this.state);
             })
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        let searchResult = 
+        this.props.searchResult != "" ? this.props.searchResult : 'kcmercer'
+        if(prevState.name !== this.state.name) {
+        axios.get(`https://api.github.com/users/${searchResult}`)
+            .then(resp => {
+                console.log(searchResult)
+                this.setState({
+                    avatar_url: resp.data.avatar_url,
+                    name: resp.data.name,
+                    login: resp.data.login,
+                    public_repos: resp.data.public_repos,
+                    followers: resp.data.followers 
+                })
+                console.log(this.state);
+            })} else {
+                console.log('woah')
+            }
     }
 
     render() {
