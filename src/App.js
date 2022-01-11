@@ -51,7 +51,8 @@ class App extends React.Component {
 
   render() {
     console.log(this.state.search)
-    const search = this.state.search;
+    const search = this.state.search; 
+    // If {search} doesn't work in User and FollowerList, {this.state.search} does work for MVP, however it updates every keystroke.
     return(<div>
       <h1>GITHUB INFO</h1>
       <form>
@@ -66,7 +67,7 @@ class App extends React.Component {
       <User search={search} />
 
       <StyledH2> Followers: </StyledH2>
-      <FollowerList search={this.state.search} />
+      <FollowerList search={search} />
       </StyledDiv>
 
     </div>);
